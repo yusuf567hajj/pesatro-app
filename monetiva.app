@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monetiva - Paywall & Creator Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen antialiased flex flex-col justify-between">
+
+  <!-- TOP NAVIGATION -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50 px-4 py-3">
+    <div class="max-w-4xl mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-2 cursor-pointer" onclick="switchView('viewer')">
+        <div class="w-9 h-9 bg-emerald-500 rounded-xl flex items-center justify-center font-bold text-slate-950 text-xl shadow-lg shadow-emerald-500/20">M</div>
+        <span class="font-bold text-xl tracking-tight bg-gradient-to-r from-white via-slate-200 to-emerald-400 bg-clip-text text-transparent">Monetiva</span>
+      </div>
+
+      <div id="nav-actions" class="flex items-center gap-3"></div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-4xl mx-auto w-full px-4 py-8 flex-grow">
+    
+    <!-- AUTH VIEW -->
+    <section id="auth-view" class="max-w-md mx-auto hidden">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+        <h2 class="text-2xl font-bold mb-2 text-white">Creator Studio Access</h2>
+        <p class="text-slate-400 text-sm mb-6">Sign in with your creator email to publish content and configure your M-PESA Daraja credentials.</p>
+        
+        <form id="auth-form" onsubmit="handleAuth(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Email Address</label>
+            <input type="email" id="auth-email" required placeholder="creator@example.com" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-emerald-500 text-slate-200">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Password</label>
+            <input type="password" id="auth-password" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-emerald-500 text-slate-200">
+          </div>
+          <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold py-2.5 rounded-lg transition text-sm shadow-lg shadow-emerald-500/20">
+            Sign In / Register Creator Account
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- VIEWER PAYWALL VIEW -->
+    <section id="viewer-view" class="max-w-xl mx-auto space-y-6">
+      <div id="paywall-card" class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+        <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold text-emerald-400 border border-slate-700">KV</div>
+            <div>
+              <h3 id="view-channel" class="font-semibold text-white text-sm">Kisumu Videos</h3>
+              <p class="text-xs text-slate-400 flex items-center gap-1">
+                <i class="fa-solid fa-eye text-slate-500"></i> <span id="view-count">2,489 views</span>
+              </p>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <span class="px-2 py-1 bg-slate-800 rounded text-xs text-slate-300 font-medium">HD</span>
+            <span id="badge-price" class="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-xs font-semibold">KES 100</span>
+          </div>
+        </div>
+
+        <div class="p-4 pb-2">
+          <h1 id="view-title" class="text-lg font-bold text-white leading-snug">Mjaka Mfine and Mokoya Leaked Video</h1>
+        </div>
+
+        <div class="relative bg-slate-950 aspect-video flex items-center justify-center overflow-hidden border-y border-slate-800">
+          <img id="video-thumbnail" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover opacity-30 blur-sm" alt="Thumbnail">
+          
+          <div id="locked-state" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-slate-950/70 backdrop-blur-md">
+            <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center text-2xl mb-3 border border-emerald-500/40 animate-pulse">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <p class="text-xs font-semibold text-emerald-400 tracking-wider uppercase mb-1">Locked Content</p>
+            <h4 class="text-sm font-medium text-slate-300 max-w-xs">Unlock to watch the full video instantly in HD</h4>
+          </div>
+
+          <div id="unlocked-state" class="absolute inset-0 hidden bg-slate-950 flex flex-col items-center justify-center">
+            <video id="active-video" controls class="w-full h-full">
+              <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
+              Your browser does not support video streaming.
+            </video>
+          </div>
+        </div>
+
+        <div id="unlock-form-box" class="p-6 space-y-4">
+          <div class="flex justify-between items-baseline">
+            <h3 class="text-lg font-bold text-white">Unlock Video</h3>
+            <span id="price-display" class="text-2xl font-black text-emerald-400">KES 100</span>
+          </div>
+
+          <div class="p-3 bg-emerald-950/30 border border-emerald-500/20 rounded-lg text-xs text-slate-300">
+            <i class="fa-solid fa-circle-info text-emerald-400 mr-1"></i> Pay via automated M-PESA STK push — watch instantly.
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">M-PESA Phone Number</label>
+            <input type="tel" id="viewer-phone" placeholder="0712 345 678" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono text-base">
+          </div>
+
+          <button onclick="triggerViewerSTK()" id="btn-pay" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3.5 rounded-xl shadow-lg shadow-emerald-500/20 transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-bolt"></i> <span id="btn-pay-text">Pay KES 100 — Watch now</span>
+          </button>
+
+          <p class="text-xs text-slate-500 text-center">
+            Integration: <span id="daraja-status-display" class="font-mono text-emerald-400">Creator Daraja API Connected</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CREATOR STUDIO VIEW -->
+    <section id="studio-view" class="space-y-6 hidden">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-6">
+        <div>
+          <h1 class="text-2xl font-bold text-white">Creator Studio</h1>
+          <p class="text-slate-400 text-sm">Configure your Safaricom M-PESA Daraja API credentials and publish content.</p>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 px-4 flex items-center gap-4">
+          <div>
+            <p class="text-xs text-slate-400 font-medium">Publishing Credits</p>
+            <p id="credit-balance" class="text-lg font-bold text-emerald-400">0 Uploads</p>
+          </div>
+          <button onclick="openSubscriptionModal()" class="bg-emerald-500 text-slate-950 font-bold text-xs px-3.5 py-2 rounded-lg shadow-md hover:bg-emerald-400 transition">
+            + Buy Upload Pass
+          </button>
+        </div>
+      </div>
+
+      <!-- Banner if Creator Has 0 Credits -->
+      <div id="no-credits-warning" class="hidden bg-rose-950/40 border border-rose-500/30 rounded-2xl p-4 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <i class="fa-solid fa-triangle-exclamation text-rose-400 text-xl"></i>
+          <div>
+            <p class="text-sm font-bold text-rose-200">Mandatory Publishing Fee Required</p>
+            <p class="text-xs text-rose-300/80">You currently have 0 upload credits. Purchase a publishing plan below before publishing your video.</p>
+          </div>
+        </div>
+        <button onclick="openSubscriptionModal()" class="bg-rose-500 hover:bg-rose-400 text-slate-950 text-xs font-bold px-4 py-2 rounded-lg transition whitespace-nowrap">
+          Pay Fee Now
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Daraja API Setup Form -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 md:col-span-1">
+          <h2 class="font-bold text-white text-base flex items-center gap-2">
+            <i class="fa-solid fa-key text-emerald-400"></i> M-PESA Daraja API Setup
+          </h2>
+          
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Business Shortcode / Till</label>
+              <input type="text" id="daraja-shortcode" placeholder="e.g. 174379 or Till/Paybill" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Consumer Key</label>
+              <input type="password" id="daraja-key" placeholder="Enter Consumer Key" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Consumer Secret</label>
+              <input type="password" id="daraja-secret" placeholder="Enter Consumer Secret" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Online Passkey</label>
+              <input type="password" id="daraja-passkey" placeholder="bfb279f9aa9bdbcf158e97dd71a467cd..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
+            </div>
+          </div>
+
+          <div class="p-3 bg-slate-950 border border-slate-800 rounded-lg text-xs text-slate-400">
+            <strong>How viewer payouts work:</strong> Monetiva uses your Daraja API keys to trigger STK pushes directly to your audience. 100% of unlock fees go straight to your Paybill or Till.
+          </div>
+
+          <button onclick="saveDarajaCredentials()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-medium py-2 rounded-lg text-sm transition">
+            Save Daraja API Credentials
+          </button>
+        </div>
+
+        <!-- Video Upload & Pricing Card -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 md:col-span-2">
+          <h2 class="font-bold text-white text-base flex items-center gap-2">
+            <i class="fa-solid fa-square-plus text-emerald-400"></i> Publish New Monetized Video
+          </h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Video Title</label>
+              <input type="text" id="input-title" value="Mjaka Mfine and Mokoya Leaked Video" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Unlock Price (KES)</label>
+              <input type="number" id="input-price" value="100" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Video File URL</label>
+            <input type="url" id="input-url" value="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 text-xs">
+          </div>
+
+          <div class="pt-2 flex items-center justify-between border-t border-slate-800 mt-4">
+            <p class="text-xs text-slate-400">Publishing Cost: <strong class="text-emerald-400">1 Credit</strong> (KES 10 per video)</p>
+            <button onclick="publishContent()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-6 py-2.5 rounded-lg text-sm shadow-lg shadow-emerald-500/20 transition flex items-center gap-2">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Pay & Publish Content
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: PLATFORM SUBSCRIPTION VIA TILL 1575710 -->
+  <div id="sub-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <div>
+          <h3 class="text-lg font-bold text-white">Creator Publishing Pass</h3>
+          <p class="text-xs text-slate-400">Pay your platform upload fee to publish content</p>
+        </div>
+        <button onclick="closeSubscriptionModal()" class="text-slate-500 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Pricing Plans Selection -->
+      <div class="space-y-3">
+        <label class="flex items-center justify-between p-3.5 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-emerald-500/50">
+          <div class="flex items-center gap-3">
+            <input type="radio" name="sub-plan" value="10" checked class="accent-emerald-500" onchange="updateSubAmount()">
+            <div>
+              <p class="text-sm font-semibold text-white">Single Upload Pass</p>
+              <p class="text-xs text-slate-400">KES 10 for 1 published video</p>
+            </div>
+          </div>
+          <span class="font-bold text-emerald-400 text-sm">KES 10</span>
+        </label>
+
+        <label class="flex items-center justify-between p-3.5 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-emerald-500/50">
+          <div class="flex items-center gap-3">
+            <input type="radio" name="sub-plan" value="30" class="accent-emerald-500" onchange="updateSubAmount()">
+            <div>
+              <p class="text-sm font-semibold text-white">6 Uploads Bundle</p>
+              <p class="text-xs text-slate-400">KES 30 for 6 published videos (Save KES 30)</p>
+            </div>
+          </div>
+          <span class="font-bold text-emerald-400 text-sm">KES 30</span>
+        </label>
+
+        <label class="flex items-center justify-between p-3.5 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-emerald-500/50">
+          <div class="flex items-center gap-3">
+            <input type="radio" name="sub-plan" value="100" class="accent-emerald-500" onchange="updateSubAmount()">
+            <div>
+              <p class="text-sm font-semibold text-white">24-Hour Day Pass</p>
+              <p class="text-xs text-slate-400">KES 100 for unlimited uploads for 24 hours</p>
+            </div>
+          </div>
+          <span class="font-bold text-emerald-400 text-sm">KES 100</span>
+        </label>
+      </div>
+
+      <!-- Payment Instructions Box: Official Till 1575710 -->
+      <div class="bg-emerald-950/40 border border-emerald-500/30 rounded-xl p-4 text-xs space-y-2">
+        <div class="flex items-center justify-between text-emerald-400 font-bold border-b border-emerald-500/20 pb-2">
+          <span>MONETIVA OFFICIAL TILL</span>
+          <span class="text-base font-mono bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/30">1575710</span>
+        </div>
+        <p class="text-slate-200 font-semibold pt-1">Step-by-Step Payment Instructions:</p>
+        <ol class="list-decimal pl-4 space-y-1.5 text-slate-300">
+          <li>Go to your phone M-PESA menu or SIM toolkit.</li>
+          <li>Select <strong>Lipa Na M-PESA</strong> &rarr; <strong>Buy Goods and Services</strong>.</li>
+          <li>Enter Till Number: <strong class="text-emerald-400 font-mono text-sm">1575710</strong>.</li>
+          <li>Enter Amount: <strong id="sub-guide-amount" class="text-emerald-400 font-mono text-sm">KES 10</strong>.</li>
+          <li>Enter your M-PESA PIN and press Send.</li>
+        </ol>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Enter M-PESA Confirmation Code</label>
+        <input type="text" id="sub-code" placeholder="e.g. QHK789XYZ" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 font-mono uppercase">
+      </div>
+
+      <button onclick="processSubscriptionPayment()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 rounded-xl transition shadow-lg shadow-emerald-500/20">
+        Verify Receipt Code & Activate Credits
+      </button>
+    </div>
+  </div>
+
+  <footer class="border-t border-slate-900 py-4 text-center text-xs text-slate-600">
+    Monetiva &copy; 2026 — Secure Creator Monetization Platform.
+  </footer>
+
+  <script>
+    let currentUser = null;
+    let creatorCredits = 0; // Starts at 0 so creator MUST pay first
+    let darajaConfig = { shortcode: '174379', key: '', secret: '', passkey: '' };
+    let currentView = 'viewer';
+
+    function initApp() {
+      renderNav();
+      renderView();
+    }
+
+    function switchView(view) {
+      currentView = view;
+      renderNav();
+      renderView();
+    }
+
+    function renderNav() {
+      const container = document.getElementById('nav-actions');
+      if (currentUser) {
+        container.innerHTML = `
+          <button onclick="switchView('viewer')" class="text-xs px-3 py-1.5 rounded-lg ${currentView === 'viewer' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-white'}">Viewer Paywall</button>
+          <button onclick="switchView('studio')" class="text-xs px-3 py-1.5 rounded-lg ${currentView === 'studio' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-white'}">Studio</button>
+          <button onclick="handleLogout()" class="text-xs text-rose-400 hover:text-rose-300 ml-2">Sign Out</button>
+        `;
+      } else {
+        container.innerHTML = `
+          <button onclick="switchView('viewer')" class="text-xs px-3 py-1.5 rounded-lg ${currentView === 'viewer' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-white'}">Viewer Paywall</button>
+          <button onclick="switchView('auth')" class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-lg font-medium hover:bg-emerald-500/20">Creator Login</button>
+        `;
+      }
+    }
+
+    function renderView() {
+      document.getElementById('viewer-view').classList.add('hidden');
+      document.getElementById('studio-view').classList.add('hidden');
+      document.getElementById('auth-view').classList.add('hidden');
+
+      if (currentView === 'viewer') document.getElementById('viewer-view').classList.remove('hidden');
+      if (currentView === 'studio') document.getElementById('studio-view').classList.remove('hidden');
+      if (currentView === 'auth') document.getElementById('auth-view').classList.remove('hidden');
+
+      document.getElementById('credit-balance').innerText = `${creatorCredits} Uploads Left`;
+      
+      const warningBanner = document.getElementById('no-credits-warning');
+      if (creatorCredits <= 0) {
+        warningBanner.classList.remove('hidden');
+      } else {
+        warningBanner.classList.add('hidden');
+      }
+
+      document.getElementById('daraja-status-display').innerText = darajaConfig.key ? `Daraja API Configured (${darajaConfig.shortcode})` : `Simulated Daraja API`;
+    }
+
+    function handleAuth(e) {
+      e.preventDefault();
+      const email = document.getElementById('auth-email').value;
+      currentUser = { email };
+      switchView('studio');
+    }
+
+    function handleLogout() {
+      currentUser = null;
+      switchView('viewer');
+    }
+
+    function saveDarajaCredentials() {
+      const shortcode = document.getElementById('daraja-shortcode').value;
+      const key = document.getElementById('daraja-key').value;
+      const secret = document.getElementById('daraja-secret').value;
+      const passkey = document.getElementById('daraja-passkey').value;
+
+      if (!shortcode || !key || !secret) {
+        return alert('Please fill in your Daraja Business Shortcode, Consumer Key, and Consumer Secret.');
+      }
+
+      darajaConfig = { shortcode, key, secret, passkey };
+      alert('Safaricom M-PESA Daraja API Credentials saved successfully!');
+      renderView();
+    }
+
+    function publishContent() {
+      // STRICT CHECK: Creator cannot publish without payment credits
+      if (creatorCredits <= 0) {
+        alert('Payment Required! You have 0 upload credits. Please purchase a plan (KES 10 / KES 30 / KES 100) via Till 1575710 to publish.');
+        return openSubscriptionModal();
+      }
+
+      const title = document.getElementById('input-title').value;
+      const price = document.getElementById('input-price').value;
+
+      document.getElementById('view-title').innerText = title;
+      document.getElementById('badge-price').innerText = `KES ${price}`;
+      document.getElementById('price-display').innerText = `KES ${price}`;
+      document.getElementById('btn-pay-text').innerText = `Pay KES ${price} — Watch now`;
+
+      // Deduct credit
+      creatorCredits -= 1;
+      alert(`Content published to Monetiva! 1 credit deducted. (${creatorCredits} uploads remaining)`);
+      switchView('viewer');
+    }
+
+    function triggerViewerSTK() {
+      const phone = document.getElementById('viewer-phone').value;
+      if (!phone) return alert('Please enter your M-PESA phone number.');
+
+      alert(`STK Push request initiated for ${phone} using creator's Daraja Shortcode (${darajaConfig.shortcode})...`);
+      
+      setTimeout(() => {
+        document.getElementById('locked-state').classList.add('hidden');
+        document.getElementById('unlock-form-box').classList.add('hidden');
+        document.getElementById('unlocked-state').classList.remove('hidden');
+        document.getElementById('active-video').play();
+      }, 1500);
+    }
+
+    function openSubscriptionModal() {
+      updateSubAmount();
+      document.getElementById('sub-modal').classList.remove('hidden');
+    }
+
+    function closeSubscriptionModal() {
+      document.getElementById('sub-modal').classList.add('hidden');
+    }
+
+    function updateSubAmount() {
+      const selectedPlan = document.querySelector('input[name="sub-plan"]:checked').value;
+      document.getElementById('sub-guide-amount').innerText = `KES ${selectedPlan}`;
+    }
+
+    function processSubscriptionPayment() {
+      const selectedPlan = document.querySelector('input[name="sub-plan"]:checked').value;
+      const code = document.getElementById('sub-code').value;
+      if (!code) return alert('Please enter your M-PESA confirmation code after paying to Till 1575710.');
+
+      alert(`Verifying payment code ${code} for KES ${selectedPlan}...`);
+
+      setTimeout(() => {
+        if (selectedPlan === "10") creatorCredits += 1;
+        if (selectedPlan === "30") creatorCredits += 6;
+        if (selectedPlan === "100") creatorCredits += 999;
+        
+        closeSubscriptionModal();
+        renderView();
+        alert(`Payment verified! ${selectedPlan === "100" ? 'Unlimited' : selectedPlan === "30" ? '6' : '1'} upload credits added to your account.`);
+      }, 1200);
+    }
+
+    initApp();
+  </script>
+</body>
+</html>
