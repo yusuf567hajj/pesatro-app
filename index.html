@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pesatro - Paywall & Creator Studio</title>
+  <title>Pesatro - Paywall, Creator Studio & Support</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -32,7 +32,7 @@
     <section id="auth-view" class="max-w-md mx-auto hidden">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
         <h2 class="text-2xl font-bold mb-2 text-white">Creator Studio Access</h2>
-        <p class="text-slate-400 text-sm mb-6">Sign in with your creator email to publish content and configure your M-PESA Daraja credentials.</p>
+        <p class="text-slate-400 text-sm mb-6">Sign in with your creator email to publish content and track your live analytics database.</p>
         
         <form id="auth-form" onsubmit="handleAuth(event)" class="space-y-4">
           <div>
@@ -59,7 +59,7 @@
             <div>
               <h3 id="view-channel" class="font-semibold text-white text-sm">Kisumu Videos</h3>
               <p class="text-xs text-slate-400 flex items-center gap-1">
-                <i class="fa-solid fa-eye text-slate-500"></i> <span id="view-count">2,489 views</span>
+                <i class="fa-solid fa-eye text-slate-500"></i> <span id="view-count-display">2,489 views</span>
               </p>
             </div>
           </div>
@@ -122,8 +122,8 @@
     <section id="studio-view" class="space-y-6 hidden">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-6">
         <div>
-          <h1 class="text-2xl font-bold text-white">Creator Studio</h1>
-          <p class="text-slate-400 text-sm">Configure your Safaricom M-PESA Daraja API credentials and publish content.</p>
+          <h1 class="text-2xl font-bold text-white">Creator Studio & Analytics</h1>
+          <p class="text-slate-400 text-sm">Monitor live database tracking, revenue, and M-PESA Daraja configuration.</p>
         </div>
 
         <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 px-4 flex items-center gap-4">
@@ -134,6 +134,30 @@
           <button onclick="openSubscriptionModal()" class="bg-emerald-500 text-slate-950 font-bold text-xs px-3.5 py-2 rounded-lg shadow-md hover:bg-emerald-400 transition">
             + Buy Upload Pass
           </button>
+        </div>
+      </div>
+
+      <!-- ANALYTICS DASHBOARD METRICS -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+          <p class="text-xs font-semibold text-slate-400 uppercase">Total Revenue</p>
+          <p id="stat-revenue" class="text-2xl font-black text-emerald-400 mt-1">KES 0</p>
+          <p class="text-xs text-slate-500 mt-1">Live DB tracked earnings</p>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+          <p class="text-xs font-semibold text-slate-400 uppercase">Total Video Views</p>
+          <p id="stat-views" class="text-2xl font-black text-white mt-1">0</p>
+          <p class="text-xs text-slate-500 mt-1">Paywall impressions</p>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+          <p class="text-xs font-semibold text-slate-400 uppercase">Successful Unlocks</p>
+          <p id="stat-unlocks" class="text-2xl font-black text-emerald-400 mt-1">0</p>
+          <p class="text-xs text-slate-500 mt-1">STK push completions</p>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+          <p class="text-xs font-semibold text-slate-400 uppercase">Active Content</p>
+          <p id="stat-content" class="text-2xl font-black text-white mt-1">1</p>
+          <p class="text-xs text-slate-500 mt-1">Published video streams</p>
         </div>
       </div>
 
@@ -154,9 +178,12 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Daraja API Setup Form -->
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 md:col-span-1">
-          <h2 class="font-bold text-white text-base flex items-center gap-2">
-            <i class="fa-solid fa-key text-emerald-400"></i> M-PESA Daraja API Setup
-          </h2>
+          <div class="flex items-center justify-between">
+            <h2 class="font-bold text-white text-base flex items-center gap-2">
+              <i class="fa-solid fa-key text-emerald-400"></i> Daraja API Setup
+            </h2>
+            <button onclick="switchView('support')" class="text-xs text-emerald-400 hover:underline">Help</button>
+          </div>
           
           <div class="space-y-3">
             <div>
@@ -180,8 +207,17 @@
             </div>
           </div>
 
-          <div class="p-3 bg-slate-950 border border-slate-800 rounded-lg text-xs text-slate-400">
-            <strong>How viewer payouts work:</strong> Pesatro uses your Daraja API keys to trigger STK pushes directly to your audience. 100% of unlock fees go straight to your Paybill or Till.
+          <!-- Direct Link for creators who don't have API keys -->
+          <div class="p-3 bg-emerald-950/40 border border-emerald-500/30 rounded-xl text-xs space-y-1.5 text-slate-300">
+            <p class="font-bold text-emerald-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-question"></i> Don't have Daraja credentials?
+            </p>
+            <p class="text-slate-400 text-xs leading-relaxed">
+              Create a free developer account to obtain your API credentials directly from Safaricom.
+            </p>
+            <a href="https://developer.safaricom.co.ke/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-emerald-400 font-bold hover:underline pt-1">
+              Safaricom Developer Portal <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </a>
           </div>
 
           <button onclick="saveDarajaCredentials()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-medium py-2 rounded-lg text-sm transition">
@@ -189,7 +225,7 @@
           </button>
         </div>
 
-        <!-- Video Upload & Pricing Card -->
+        <!-- Video Upload & Database Logs -->
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 md:col-span-2">
           <h2 class="font-bold text-white text-base flex items-center gap-2">
             <i class="fa-solid fa-square-plus text-emerald-400"></i> Publish New Monetized Video
@@ -217,6 +253,74 @@
               <i class="fa-solid fa-cloud-arrow-up"></i> Pay & Publish Content
             </button>
           </div>
+
+          <!-- Transaction Database Log Table -->
+          <div class="pt-4 border-t border-slate-800 space-y-2">
+            <div class="flex justify-between items-center">
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Live Transaction Database Log</h3>
+              <button onclick="exportAnalyticsReport()" class="text-xs text-emerald-400 hover:underline">Export Report</button>
+            </div>
+            <div id="db-log-container" class="bg-slate-950 rounded-xl p-3 text-xs font-mono max-h-36 overflow-y-auto space-y-1 text-slate-400 border border-slate-800">
+              <p>[SYSTEM] Database initialized successfully.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUPPORT & DARAA GUIDELINES VIEW -->
+    <section id="support-view" class="max-w-3xl mx-auto space-y-6 hidden">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6 shadow-xl">
+        <div class="border-b border-slate-800 pb-4">
+          <h1 class="text-2xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-headset text-emerald-400"></i> Support & Daraja API Setup Guide
+          </h1>
+          <p class="text-slate-400 text-sm mt-1">Learn how to create and configure your M-PESA Daraja API credentials to receive instant audience payouts.</p>
+        </div>
+
+        <!-- Portal Link Card -->
+        <div class="bg-emerald-950/40 border border-emerald-500/30 rounded-xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <h3 class="text-base font-bold text-white">Official Safaricom Developer Portal</h3>
+            <p class="text-xs text-slate-300 mt-0.5">Don't have an M-PESA Daraja account? Register on Safaricom's official portal to get your Consumer Key & Secret.</p>
+          </div>
+          <a href="https://developer.safaricom.co.ke/" target="_blank" rel="noopener noreferrer" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs px-4 py-2.5 rounded-lg whitespace-nowrap shadow-md transition flex items-center gap-2">
+            Visit Developer Portal <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </a>
+        </div>
+
+        <!-- Step by Step Setup Guide -->
+        <div class="space-y-4">
+          <h2 class="text-lg font-bold text-white border-b border-slate-800 pb-2">Step-by-Step Daraja Setup Guide</h2>
+
+          <div class="space-y-4 text-xs text-slate-300 leading-relaxed">
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-1.5">
+              <p class="font-bold text-emerald-400 text-sm">Step 1: Create a Developer Account</p>
+              <p>Go to the <a href="https://developer.safaricom.co.ke/" target="_blank" class="text-emerald-400 underline font-semibold">Safaricom Developer Portal</a> and click <strong>Sign Up</strong>. Enter your full name, email address, phone number, and create a password.</p>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-1.5">
+              <p class="font-bold text-emerald-400 text-sm">Step 2: Create a New App</p>
+              <p>Once logged in to your dashboard, navigate to <strong>My Apps</strong> and click <strong>Create New App</strong>. Check the box for <strong>Lipa Na M-PESA Sandbox API</strong> (or Production API for live business Till/Paybill), name your app (e.g., <em>Pesatro Store</em>), and submit.</p>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-1.5">
+              <p class="font-bold text-emerald-400 text-sm">Step 3: Copy Your Consumer Key & Secret</p>
+              <p>Open your newly created app details. You will see two keys: <strong>Consumer Key</strong> and <strong>Consumer Secret</strong>. Copy both key strings.</p>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-1.5">
+              <p class="font-bold text-emerald-400 text-sm">Step 4: Paste Credentials in Pesatro Studio</p>
+              <p>Head to your <strong>Pesatro Creator Studio</strong>, paste your <strong>Business Shortcode / Till</strong>, <strong>Consumer Key</strong>, <strong>Consumer Secret</strong>, and <strong>Passkey</strong> into the setup panel, and click <strong>Save Daraja API Credentials</strong>.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-slate-800 pt-4 flex items-center justify-between">
+          <p class="text-xs text-slate-500">Need platform support or payment verification assistance?</p>
+          <button onclick="switchView('studio')" class="text-xs bg-slate-800 hover:bg-slate-700 text-white font-medium px-4 py-2 rounded-lg transition">
+            Back to Creator Studio
+          </button>
         </div>
       </div>
     </section>
@@ -302,14 +406,46 @@
   </footer>
 
   <script>
-    let currentUser = null;
-    let creatorCredits = 0; // Starts at 0 so creator MUST pay first
-    let darajaConfig = { shortcode: '174379', key: '', secret: '', passkey: '' };
+    // DATABASE STATE & PERSISTENCE
+    let dbState = JSON.parse(localStorage.getItem('pesatro_db')) || {
+      currentUser: null,
+      creatorCredits: 0,
+      darajaConfig: { shortcode: '174379', key: '', secret: '', passkey: '' },
+      analytics: {
+        totalRevenue: 0,
+        totalViews: 2489,
+        totalUnlocks: 0,
+        logs: []
+      }
+    };
+
     let currentView = 'viewer';
 
+    function saveDB() {
+      localStorage.setItem('pesatro_db', JSON.stringify(dbState));
+    }
+
+    function logEvent(message) {
+      const timestamp = new Date().toLocaleTimeString();
+      dbState.analytics.logs.unshift(`[${timestamp}] ${message}`);
+      if (dbState.analytics.logs.length > 30) dbState.analytics.logs.pop();
+      saveDB();
+      renderLogs();
+    }
+
+    function renderLogs() {
+      const container = document.getElementById('db-log-container');
+      if (!container) return;
+      container.innerHTML = dbState.analytics.logs.map(log => `<p>${log}</p>`).join('');
+    }
+
     function initApp() {
+      dbState.analytics.totalViews += 1;
+      saveDB();
+      logEvent('Paywall visited by new user session.');
       renderNav();
       renderView();
+      renderLogs();
     }
 
     function switchView(view) {
@@ -320,15 +456,17 @@
 
     function renderNav() {
       const container = document.getElementById('nav-actions');
-      if (currentUser) {
+      if (dbState.currentUser) {
         container.innerHTML = `
           <button onclick="switchView('viewer')" class="text-xs px-3 py-1.5 rounded-lg ${currentView === 'viewer' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-white'}">Viewer Paywall</button>
-          <button onclick="switchView('studio')" class="text-xs px-3 py-1.5 rounded-lg ${currentView === 'studio' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-white'}">Studio</button>
+          <button onclick="switchView('studio')" class="text-xs px-3 py-1.5 rounded-lg ${currentView === 'studio' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-white'}">Studio & Analytics</button>
+          <button onclick="switchView('support')" class="text-xs px-3 py-1.5 rounded-lg ${currentView === 'support' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-white'}">Support</button>
           <button onclick="handleLogout()" class="text-xs text-rose-400 hover:text-rose-300 ml-2">Sign Out</button>
         `;
       } else {
         container.innerHTML = `
           <button onclick="switchView('viewer')" class="text-xs px-3 py-1.5 rounded-lg ${currentView === 'viewer' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-white'}">Viewer Paywall</button>
+          <button onclick="switchView('support')" class="text-xs px-3 py-1.5 rounded-lg ${currentView === 'support' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-white'}">Support</button>
           <button onclick="switchView('auth')" class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-lg font-medium hover:bg-emerald-500/20">Creator Login</button>
         `;
       }
@@ -338,32 +476,43 @@
       document.getElementById('viewer-view').classList.add('hidden');
       document.getElementById('studio-view').classList.add('hidden');
       document.getElementById('auth-view').classList.add('hidden');
+      document.getElementById('support-view').classList.add('hidden');
 
       if (currentView === 'viewer') document.getElementById('viewer-view').classList.remove('hidden');
       if (currentView === 'studio') document.getElementById('studio-view').classList.remove('hidden');
       if (currentView === 'auth') document.getElementById('auth-view').classList.remove('hidden');
+      if (currentView === 'support') document.getElementById('support-view').classList.remove('hidden');
 
-      document.getElementById('credit-balance').innerText = `${creatorCredits} Uploads Left`;
-      
+      document.getElementById('credit-balance').innerText = `${dbState.creatorCredits} Uploads Left`;
+      document.getElementById('view-count-display').innerText = `${dbState.analytics.totalViews.toLocaleString()} views`;
+
+      document.getElementById('stat-revenue').innerText = `KES ${dbState.analytics.totalRevenue.toLocaleString()}`;
+      document.getElementById('stat-views').innerText = dbState.analytics.totalViews.toLocaleString();
+      document.getElementById('stat-unlocks').innerText = dbState.analytics.totalUnlocks;
+
       const warningBanner = document.getElementById('no-credits-warning');
-      if (creatorCredits <= 0) {
+      if (dbState.creatorCredits <= 0) {
         warningBanner.classList.remove('hidden');
       } else {
         warningBanner.classList.add('hidden');
       }
 
-      document.getElementById('daraja-status-display').innerText = darajaConfig.key ? `Daraja API Configured (${darajaConfig.shortcode})` : `Simulated Daraja API`;
+      document.getElementById('daraja-status-display').innerText = dbState.darajaConfig.key ? `Daraja API Configured (${dbState.darajaConfig.shortcode})` : `Simulated Daraja API`;
     }
 
     function handleAuth(e) {
       e.preventDefault();
       const email = document.getElementById('auth-email').value;
-      currentUser = { email };
+      dbState.currentUser = { email };
+      saveDB();
+      logEvent(`Creator authenticated: ${email}`);
       switchView('studio');
     }
 
     function handleLogout() {
-      currentUser = null;
+      dbState.currentUser = null;
+      saveDB();
+      logEvent('Creator signed out.');
       switchView('viewer');
     }
 
@@ -377,14 +526,15 @@
         return alert('Please fill in your Daraja Business Shortcode, Consumer Key, and Consumer Secret.');
       }
 
-      darajaConfig = { shortcode, key, secret, passkey };
+      dbState.darajaConfig = { shortcode, key, secret, passkey };
+      saveDB();
+      logEvent(`Daraja API credentials updated for Shortcode: ${shortcode}`);
       alert('Safaricom M-PESA Daraja API Credentials saved successfully!');
       renderView();
     }
 
     function publishContent() {
-      // STRICT CHECK: Creator cannot publish without payment credits
-      if (creatorCredits <= 0) {
+      if (dbState.creatorCredits <= 0) {
         alert('Payment Required! You have 0 upload credits. Please purchase a plan (KES 10 / KES 30 / KES 100) via Till 1575710 to publish.');
         return openSubscriptionModal();
       }
@@ -397,9 +547,10 @@
       document.getElementById('price-display').innerText = `KES ${price}`;
       document.getElementById('btn-pay-text').innerText = `Pay KES ${price} — Watch now`;
 
-      // Deduct credit
-      creatorCredits -= 1;
-      alert(`Content published to Pesatro! 1 credit deducted. (${creatorCredits} uploads remaining)`);
+      dbState.creatorCredits -= 1;
+      saveDB();
+      logEvent(`Published new video: "${title}" (Price: KES ${price})`);
+      alert(`Content published to Pesatro! 1 credit deducted. (${dbState.creatorCredits} uploads remaining)`);
       switchView('viewer');
     }
 
@@ -407,13 +558,20 @@
       const phone = document.getElementById('viewer-phone').value;
       if (!phone) return alert('Please enter your M-PESA phone number.');
 
-      alert(`STK Push request initiated for ${phone} using creator's Daraja Shortcode (${darajaConfig.shortcode})...`);
+      logEvent(`STK Push initiated for viewer phone ${phone} using Shortcode ${dbState.darajaConfig.shortcode}`);
+      alert(`STK Push request initiated for ${phone} using creator's Daraja Shortcode (${dbState.darajaConfig.shortcode})...`);
       
       setTimeout(() => {
+        dbState.analytics.totalUnlocks += 1;
+        dbState.analytics.totalRevenue += 100;
+        saveDB();
+        logEvent('STK Push successful! Video unlocked by viewer.');
+
         document.getElementById('locked-state').classList.add('hidden');
         document.getElementById('unlock-form-box').classList.add('hidden');
         document.getElementById('unlocked-state').classList.remove('hidden');
         document.getElementById('active-video').play();
+        renderView();
       }, 1500);
     }
 
@@ -436,17 +594,30 @@
       const code = document.getElementById('sub-code').value;
       if (!code) return alert('Please enter your M-PESA confirmation code after paying to Till 1575710.');
 
+      logEvent(`Verifying platform fee payment code ${code} for KES ${selectedPlan} to Till 1575710...`);
       alert(`Verifying payment code ${code} for KES ${selectedPlan}...`);
 
       setTimeout(() => {
-        if (selectedPlan === "10") creatorCredits += 1;
-        if (selectedPlan === "30") creatorCredits += 6;
-        if (selectedPlan === "100") creatorCredits += 999;
+        if (selectedPlan === "10") dbState.creatorCredits += 1;
+        if (selectedPlan === "30") dbState.creatorCredits += 6;
+        if (selectedPlan === "100") dbState.creatorCredits += 999;
         
+        saveDB();
         closeSubscriptionModal();
         renderView();
+        logEvent(`Platform subscription verified! Added credits to creator account.`);
         alert(`Payment verified! ${selectedPlan === "100" ? 'Unlimited' : selectedPlan === "30" ? '6' : '1'} upload credits added to your account.`);
       }, 1200);
+    }
+
+    function exportAnalyticsReport() {
+      const report = `PESATRO ANALYTICS & DATABASE REPORT\n-----------------------------------\nTotal Views: ${dbState.analytics.totalViews}\nTotal Unlocks: ${dbState.analytics.totalUnlocks}\nTotal Revenue: KES ${dbState.analytics.totalRevenue}\n\nTRANSACTION LOGS:\n${dbState.analytics.logs.join('\n')}`;
+      const blob = new Blob([report], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'pesatro-analytics-report.txt';
+      a.click();
     }
 
     initApp();
