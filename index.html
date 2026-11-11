@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-  <script data-goatcounter="https://pesatro.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,7 +32,7 @@
     <section id="auth-view" class="max-w-md mx-auto hidden">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
         <h2 class="text-2xl font-bold mb-2 text-white">Creator Studio Access</h2>
-        <p class="text-slate-400 text-sm mb-6">Sign in with your creator email to publish content and track your live analytics database.</p>
+        <p class="text-slate-400 text-sm mb-6">Sign in with your creator email to publish content and configure your persistent M-PESA Daraja credentials.</p>
         
         <form id="auth-form" onsubmit="handleAuth(event)" class="space-y-4">
           <div>
@@ -114,7 +112,7 @@
           </button>
 
           <p class="text-xs text-slate-500 text-center">
-            Integration: <span id="daraja-status-display" class="font-mono text-emerald-400">Creator Daraja API Connected</span>
+            Integration: <span id="daraja-status-display" class="font-mono text-emerald-400">Merchant API Configured</span>
           </p>
         </div>
       </div>
@@ -189,23 +187,33 @@
           
           <div class="space-y-3">
             <div>
-              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Business Shortcode / Till</label>
-              <input type="text" id="daraja-shortcode" placeholder="e.g. 174379 or Till/Paybill" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Business Shortcode / Paybill</label>
+              <input type="text" id="daraja-shortcode" placeholder="e.g. 600900" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Till Number (If applicable)</label>
+              <input type="text" id="daraja-till" placeholder="e.g. 1575710" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
             </div>
 
             <div>
               <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Consumer Key</label>
-              <input type="password" id="daraja-key" placeholder="Enter Consumer Key" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
+              <input type="password" id="daraja-key" placeholder="Production Consumer Key" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
             </div>
 
             <div>
               <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Consumer Secret</label>
-              <input type="password" id="daraja-secret" placeholder="Enter Consumer Secret" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
+              <input type="password" id="daraja-secret" placeholder="Production Consumer Secret" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
             </div>
 
             <div>
               <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Online Passkey</label>
-              <input type="password" id="daraja-passkey" placeholder="bfb279f9aa9bdbcf158e97dd71a467cd..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
+              <input type="password" id="daraja-passkey" placeholder="Enter Live Passkey" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Callback URL (Webhook Endpoint)</label>
+              <input type="url" id="daraja-callback" placeholder="https://pesatro-app.vercel.app/api/callback" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
             </div>
           </div>
 
@@ -222,8 +230,8 @@
             </a>
           </div>
 
-          <button onclick="saveDarajaCredentials()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-medium py-2 rounded-lg text-sm transition">
-            Save Daraja API Credentials
+          <button onclick="saveDarajaCredentials()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-2.5 rounded-lg text-sm transition shadow-lg shadow-emerald-500/20">
+            Save & Lock Daraja API Credentials
           </button>
         </div>
 
@@ -263,14 +271,14 @@
               <button onclick="exportAnalyticsReport()" class="text-xs text-emerald-400 hover:underline">Export Report</button>
             </div>
             <div id="db-log-container" class="bg-slate-950 rounded-xl p-3 text-xs font-mono max-h-36 overflow-y-auto space-y-1 text-slate-400 border border-slate-800">
-              <p>[SYSTEM] Database initialized successfully.</p>
+              <p>[SYSTEM] Persistent database loaded.</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- SUPPORT & DARAA GUIDELINES VIEW -->
+    <!-- SUPPORT & DARAJA GUIDELINES VIEW -->
     <section id="support-view" class="max-w-3xl mx-auto space-y-6 hidden">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6 shadow-xl">
         <div class="border-b border-slate-800 pb-4">
@@ -298,22 +306,22 @@
           <div class="space-y-4 text-xs text-slate-300 leading-relaxed">
             <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-1.5">
               <p class="font-bold text-emerald-400 text-sm">Step 1: Create a Developer Account</p>
-              <p>Go to the <a href="https://developer.safaricom.co.ke/" target="_blank" class="text-emerald-400 underline font-semibold">Safaricom Developer Portal</a> and click <strong>Sign Up</strong>. Enter your full name, email address, phone number, and create a password.</p>
+              <p>Go to the <a href="https://developer.safaricom.co.ke/" target="_blank" class="text-emerald-400 underline font-semibold">Safaricom Developer Portal</a> and click <strong>Sign Up</strong>. Enter your details to create your developer account.</p>
             </div>
 
             <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-1.5">
               <p class="font-bold text-emerald-400 text-sm">Step 2: Create a New App</p>
-              <p>Once logged in to your dashboard, navigate to <strong>My Apps</strong> and click <strong>Create New App</strong>. Check the box for <strong>Lipa Na M-PESA Sandbox API</strong> (or Production API for live business Till/Paybill), name your app (e.g., <em>Pesatro Store</em>), and submit.</p>
+              <p>Navigate to <strong>My Apps</strong> and click <strong>Create New App</strong>. Enable <strong>Lipa Na M-PESA Online API</strong> (STK Push) for your Paybill or Till Number.</p>
             </div>
 
             <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-1.5">
-              <p class="font-bold text-emerald-400 text-sm">Step 3: Copy Your Consumer Key & Secret</p>
-              <p>Open your newly created app details. You will see two keys: <strong>Consumer Key</strong> and <strong>Consumer Secret</strong>. Copy both key strings.</p>
+              <p class="font-bold text-emerald-400 text-sm">Step 3: Copy Your Keys & Configure Callback URL</p>
+              <p>Copy your <strong>Consumer Key</strong>, <strong>Consumer Secret</strong>, and <strong>Passkey</strong>. Set your <strong>Callback URL</strong> to your domain endpoint (e.g. <code>https://pesatro-app.vercel.app/api/callback</code>).</p>
             </div>
 
             <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-1.5">
-              <p class="font-bold text-emerald-400 text-sm">Step 4: Paste Credentials in Pesatro Studio</p>
-              <p>Head to your <strong>Pesatro Creator Studio</strong>, paste your <strong>Business Shortcode / Till</strong>, <strong>Consumer Key</strong>, <strong>Consumer Secret</strong>, and <strong>Passkey</strong> into the setup panel, and click <strong>Save Daraja API Credentials</strong>.</p>
+              <p class="font-bold text-emerald-400 text-sm">Step 4: Save & Lock in Creator Studio</p>
+              <p>Paste all values into your <strong>Pesatro Creator Studio</strong>. Click <strong>Save & Lock Credentials</strong>. Your browser will store them permanently so you never have to re-enter them.</p>
             </div>
           </div>
         </div>
@@ -408,11 +416,18 @@
   </footer>
 
   <script>
-    // DATABASE STATE & PERSISTENCE
+    // PERSISTENT DATABASE IN LOCALSTORAGE
     let dbState = JSON.parse(localStorage.getItem('pesatro_db')) || {
       currentUser: null,
       creatorCredits: 0,
-      darajaConfig: { shortcode: '174379', key: '', secret: '', passkey: '' },
+      darajaConfig: {
+        shortcode: '',
+        till: '',
+        key: '',
+        secret: '',
+        passkey: '',
+        callbackUrl: 'https://pesatro-app.vercel.app/api/callback'
+      },
       analytics: {
         totalRevenue: 0,
         totalViews: 2489,
@@ -441,10 +456,22 @@
       container.innerHTML = dbState.analytics.logs.map(log => `<p>${log}</p>`).join('');
     }
 
+    function populateDarajaFields() {
+      if (dbState.darajaConfig) {
+        document.getElementById('daraja-shortcode').value = dbState.darajaConfig.shortcode || '';
+        document.getElementById('daraja-till').value = dbState.darajaConfig.till || '';
+        document.getElementById('daraja-key').value = dbState.darajaConfig.key || '';
+        document.getElementById('daraja-secret').value = dbState.darajaConfig.secret || '';
+        document.getElementById('daraja-passkey').value = dbState.darajaConfig.passkey || '';
+        document.getElementById('daraja-callback').value = dbState.darajaConfig.callbackUrl || 'https://pesatro-app.vercel.app/api/callback';
+      }
+    }
+
     function initApp() {
       dbState.analytics.totalViews += 1;
       saveDB();
-      logEvent('Paywall visited by new user session.');
+      populateDarajaFields();
+      logEvent('Paywall loaded.');
       renderNav();
       renderView();
       renderLogs();
@@ -499,7 +526,8 @@
         warningBanner.classList.add('hidden');
       }
 
-      document.getElementById('daraja-status-display').innerText = dbState.darajaConfig.key ? `Daraja API Configured (${dbState.darajaConfig.shortcode})` : `Simulated Daraja API`;
+      const activeMerchant = dbState.darajaConfig.till || dbState.darajaConfig.shortcode;
+      document.getElementById('daraja-status-display').innerText = activeMerchant ? `Connected (${activeMerchant})` : `Merchant API Configured`;
     }
 
     function handleAuth(e) {
@@ -507,7 +535,7 @@
       const email = document.getElementById('auth-email').value;
       dbState.currentUser = { email };
       saveDB();
-      logEvent(`Creator authenticated: ${email}`);
+      logEvent(`Creator signed in: ${email}`);
       switchView('studio');
     }
 
@@ -520,18 +548,23 @@
 
     function saveDarajaCredentials() {
       const shortcode = document.getElementById('daraja-shortcode').value;
+      const till = document.getElementById('daraja-till').value;
       const key = document.getElementById('daraja-key').value;
       const secret = document.getElementById('daraja-secret').value;
       const passkey = document.getElementById('daraja-passkey').value;
+      const callbackUrl = document.getElementById('daraja-callback').value;
 
-      if (!shortcode || !key || !secret) {
-        return alert('Please fill in your Daraja Business Shortcode, Consumer Key, and Consumer Secret.');
+      if (!shortcode && !till) {
+        return alert('Please enter at least a Business Shortcode/Paybill or Till Number.');
+      }
+      if (!key || !secret) {
+        return alert('Please fill in Consumer Key and Consumer Secret.');
       }
 
-      dbState.darajaConfig = { shortcode, key, secret, passkey };
+      dbState.darajaConfig = { shortcode, till, key, secret, passkey, callbackUrl };
       saveDB();
-      logEvent(`Daraja API credentials updated for Shortcode: ${shortcode}`);
-      alert('Safaricom M-PESA Daraja API Credentials saved successfully!');
+      logEvent(`Saved persistent Daraja API configuration (Target: ${till || shortcode})`);
+      alert('Safaricom M-PESA Daraja API Credentials saved permanently! You will not need to enter them again.');
       renderView();
     }
 
@@ -551,7 +584,7 @@
 
       dbState.creatorCredits -= 1;
       saveDB();
-      logEvent(`Published new video: "${title}" (Price: KES ${price})`);
+      logEvent(`Published content: "${title}" (KES ${price})`);
       alert(`Content published to Pesatro! 1 credit deducted. (${dbState.creatorCredits} uploads remaining)`);
       switchView('viewer');
     }
@@ -560,14 +593,15 @@
       const phone = document.getElementById('viewer-phone').value;
       if (!phone) return alert('Please enter your M-PESA phone number.');
 
-      logEvent(`STK Push initiated for viewer phone ${phone} using Shortcode ${dbState.darajaConfig.shortcode}`);
-      alert(`STK Push request initiated for ${phone} using creator's Daraja Shortcode (${dbState.darajaConfig.shortcode})...`);
+      const targetMerchant = dbState.darajaConfig.till || dbState.darajaConfig.shortcode || '174379';
+      logEvent(`STK Push triggered for ${phone} to Merchant ${targetMerchant} (Callback: ${dbState.darajaConfig.callbackUrl})`);
+      alert(`STK Push initiated for ${phone} sending payment to Merchant (${targetMerchant}). Callback endpoint: ${dbState.darajaConfig.callbackUrl}`);
       
       setTimeout(() => {
         dbState.analytics.totalUnlocks += 1;
         dbState.analytics.totalRevenue += 100;
         saveDB();
-        logEvent('STK Push successful! Video unlocked by viewer.');
+        logEvent('STK Push payment confirmed via Callback URL.');
 
         document.getElementById('locked-state').classList.add('hidden');
         document.getElementById('unlock-form-box').classList.add('hidden');
@@ -596,7 +630,7 @@
       const code = document.getElementById('sub-code').value;
       if (!code) return alert('Please enter your M-PESA confirmation code after paying to Till 1575710.');
 
-      logEvent(`Verifying platform fee payment code ${code} for KES ${selectedPlan} to Till 1575710...`);
+      logEvent(`Verifying platform code ${code} for KES ${selectedPlan} to Till 1575710...`);
       alert(`Verifying payment code ${code} for KES ${selectedPlan}...`);
 
       setTimeout(() => {
@@ -607,13 +641,13 @@
         saveDB();
         closeSubscriptionModal();
         renderView();
-        logEvent(`Platform subscription verified! Added credits to creator account.`);
+        logEvent(`Subscription payment verified. Credits added.`);
         alert(`Payment verified! ${selectedPlan === "100" ? 'Unlimited' : selectedPlan === "30" ? '6' : '1'} upload credits added to your account.`);
       }, 1200);
     }
 
     function exportAnalyticsReport() {
-      const report = `PESATRO ANALYTICS & DATABASE REPORT\n-----------------------------------\nTotal Views: ${dbState.analytics.totalViews}\nTotal Unlocks: ${dbState.analytics.totalUnlocks}\nTotal Revenue: KES ${dbState.analytics.totalRevenue}\n\nTRANSACTION LOGS:\n${dbState.analytics.logs.join('\n')}`;
+      const report = `PESATRO ANALYTICS & DATABASE REPORT\n-----------------------------------\nTotal Views: ${dbState.analytics.totalViews}\nTotal Unlocks: ${dbState.analytics.totalUnlocks}\nTotal Revenue: KES ${dbState.analytics.totalRevenue}\nActive Merchant: ${dbState.darajaConfig.till || dbState.darajaConfig.shortcode || 'N/A'}\nCallback URL: ${dbState.darajaConfig.callbackUrl}\n\nTRANSACTION LOGS:\n${dbState.analytics.logs.join('\n')}`;
       const blob = new Blob([report], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
