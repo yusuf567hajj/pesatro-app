@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Monetro - Paywall & Creator Studio</title>
+  <title>Pesatro - Paywall & Creator Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -17,8 +17,8 @@
   <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50 px-4 py-3">
     <div class="max-w-4xl mx-auto flex justify-between items-center">
       <div class="flex items-center gap-2 cursor-pointer" onclick="switchView('viewer')">
-        <div class="w-9 h-9 bg-emerald-500 rounded-xl flex items-center justify-center font-bold text-slate-950 text-xl shadow-lg shadow-emerald-500/20">M</div>
-        <span class="font-bold text-xl tracking-tight bg-gradient-to-r from-white via-slate-200 to-emerald-400 bg-clip-text text-transparent">Monetro</span>
+        <div class="w-9 h-9 bg-emerald-500 rounded-xl flex items-center justify-center font-bold text-slate-950 text-xl shadow-lg shadow-emerald-500/20">P</div>
+        <span class="font-bold text-xl tracking-tight bg-gradient-to-r from-white via-slate-200 to-emerald-400 bg-clip-text text-transparent">Pesatro</span>
       </div>
 
       <div id="nav-actions" class="flex items-center gap-3"></div>
@@ -181,7 +181,7 @@
           </div>
 
           <div class="p-3 bg-slate-950 border border-slate-800 rounded-lg text-xs text-slate-400">
-            <strong>How viewer payouts work:</strong> Monetro uses your Daraja API keys to trigger STK pushes directly to your audience. 100% of unlock fees go straight to your Paybill or Till.
+            <strong>How viewer payouts work:</strong> Pesatro uses your Daraja API keys to trigger STK pushes directly to your audience. 100% of unlock fees go straight to your Paybill or Till.
           </div>
 
           <button onclick="saveDarajaCredentials()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-medium py-2 rounded-lg text-sm transition">
@@ -273,7 +273,7 @@
       <!-- Payment Instructions Box: Official Till 1575710 -->
       <div class="bg-emerald-950/40 border border-emerald-500/30 rounded-xl p-4 text-xs space-y-2">
         <div class="flex items-center justify-between text-emerald-400 font-bold border-b border-emerald-500/20 pb-2">
-          <span>MONETRO OFFICIAL TILL</span>
+          <span>PESATRO OFFICIAL TILL</span>
           <span class="text-base font-mono bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/30">1575710</span>
         </div>
         <p class="text-slate-200 font-semibold pt-1">Step-by-Step Payment Instructions:</p>
@@ -298,7 +298,7 @@
   </div>
 
   <footer class="border-t border-slate-900 py-4 text-center text-xs text-slate-600">
-    Monetro &copy; 2026 — Secure Creator Monetization Platform.
+    Pesatro &copy; 2026 — Secure Creator Monetization Platform.
   </footer>
 
   <script>
@@ -399,7 +399,7 @@
 
       // Deduct credit
       creatorCredits -= 1;
-      alert(`Content published to Monetro! 1 credit deducted. (${creatorCredits} uploads remaining)`);
+      alert(`Content published to Pesatro! 1 credit deducted. (${creatorCredits} uploads remaining)`);
       switchView('viewer');
     }
 
